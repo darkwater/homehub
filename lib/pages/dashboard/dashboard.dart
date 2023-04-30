@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:homehub/pages/dashboard/widgets/bus.dart";
 import "package:homehub/pages/dashboard/widgets/common.dart";
 import "package:homehub/pages/dashboard/widgets/weather.dart";
 import "package:homehub/providers.dart";
@@ -48,9 +49,7 @@ class DashboardPage extends ConsumerWidget {
           SizedBox(width: 8),
           Expanded(
             flex: 2,
-            child: WidgetShell(
-              child: Center(),
-            ),
+            child: BusWidget(),
           ),
         ],
       ),

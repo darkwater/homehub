@@ -5,6 +5,7 @@ import "package:homehub/preferences.dart";
 import "package:homehub/repositories/buienradar/buienradar.dart";
 import "package:homehub/repositories/home_assistant/config.dart";
 import "package:homehub/repositories/home_assistant/home_assistant.dart";
+import "package:homehub/repositories/ovapi/ovapi.dart";
 
 final _haApiKeyProvider = StreamProvider<String?>(
   (ref) => preferences
@@ -49,6 +50,17 @@ final buienradarProvider = Provider<BuienradarRepo>(
   (ref) => BuienradarRepo(
     Dio()
       ..options.baseUrl = "https://graphdata.buienradar.nl"
+      ..options.contentType = Headers.jsonContentType,
+  ),
+);
+
+final ovapiProvider = Provider<OvapiRepo>(
+  (ref) => OvapiRepo(
+    Dio()
+      ..options.baseUrl = "https://v0.ovapi.nl"
+      ..options.headers = {
+        "User-Agent": "HomeHub/1.0.0",
+      }
       ..options.contentType = Headers.jsonContentType,
   ),
 );

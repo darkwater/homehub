@@ -55,7 +55,23 @@ class AsyncRefWidgetShell<T> extends ConsumerWidget {
       child: value.when(
         data: (data) => builder(context, data),
         loading: () => Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text(err.toString())),
+        error: (err, stack) => Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                err.toString(),
+                style: TextStyle(color: Colors.red),
+                softWrap: true,
+              ),
+              Text(
+                stack.toString(),
+                style: TextStyle(color: Colors.amber),
+                softWrap: true,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
