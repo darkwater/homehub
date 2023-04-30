@@ -1,26 +1,12 @@
-import "package:dio/dio.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:homehub/pages/dashboard/widgets/common.dart";
+import "package:homehub/pages/dashboard/widgets/weather.dart";
 import "package:homehub/providers.dart";
-import "package:homehub/repositories/home_assistant/config.dart";
-import "package:homehub/repositories/home_assistant/home_assistant.dart";
 import "package:homehub/widgets/api_key_scanner.dart";
-import "package:homehub/widgets/json_item.dart";
+import "package:wakelock/wakelock.dart";
 
-final haApiProvider = Provider<HomeAssistantRepo>(
-  (ref) => HomeAssistantRepo(
-    Dio()
-      ..options.baseUrl = "https://ha.fbk.red/api"
-      ..options.headers = {
-        "Authorization": "Bearer ${ref.watch(haApiKeyProvider)}",
-      }
-      ..options.contentType = Headers.jsonContentType,
-    Uri.parse("wss://ha.fbk.red/api/websocket"),
-  ),
-);
-
-final haConfigProvider =
-    FutureProvider<HaConfig>((ref) => ref.watch(haApiProvider).getConfig());
+import "widgets/clock.dart";
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -37,14 +23,37 @@ class DashboardPage extends ConsumerWidget {
       return Scaffold(body: ApiKeyScanner());
     }
 
+    Wakelock.enable();
+
     return Scaffold(
-      body: ref.watch(haConfigProvider).when(
-            data: (config) => SingleChildScrollView(
-              child: JsonItem("", config.raw),
+      backgroundColor: Colors.black,
+      body: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                ClockWidget(),
+                SizedBox(height: 8),
+                WeatherWidget(),
+                SizedBox(height: 8),
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: WidgetShell(child: Center()),
+                  ),
+                ),
+              ],
             ),
-            error: (e, stack) => Text(e.toString()),
-            loading: () => const Center(child: CircularProgressIndicator()),
           ),
+          SizedBox(width: 8),
+          Expanded(
+            flex: 2,
+            child: WidgetShell(
+              child: Center(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

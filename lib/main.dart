@@ -7,6 +7,7 @@ import "pages/dashboard/dashboard.dart";
 import "providers.dart";
 
 late final StreamingSharedPreferences preferences;
+late final ProviderContainer providerContainer;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ void main() async {
 
   preferences = await StreamingSharedPreferences.instance;
 
-  final providerContainer = ProviderContainer();
+  providerContainer = ProviderContainer();
   providerContainer.read(haApiKeyProvider);
 
   runApp(
